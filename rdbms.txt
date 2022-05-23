@@ -1,0 +1,70 @@
+
+
+CREATE TABLE employee_salary (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,employee_details_id INT NOT NULL,designation VARCHAR(255) NOT NULL,basic_salary INT NOT NULL,flexi_basket VARCHAR(255) NOT NULL,ctc INT NOT NULL,FOREIGN KEY(employee_details_id) REFERENCES employee_details(id);
+
+INSERT INTO employee_details VALUES (11,"Hidayat","Ali","19-10-1996","Haryana,"Chandigarh"),(12,"Sonakshi","Singh","28-01-2000","Arunachal Pradesh","Itanagar"),(13,"Rakhi","Bisht","003-06-1992","Haryana","Chandigarh"),(14,"Priya","Rawat","26-11-1996","Karnataka","Bengaluru"),(15,"Santosh","Nayal","24-12-1998","Bihar","Patna"),(16,"Omi","Bisht","09-09-2003","Kerela","Thiruvananthapuram"),(17,"Renu","Rawat","24-03-1999","Goa","Panaji"),(18,"Priyanka","Satyapal","10-09-1992","Madhya Pradesh","Bhopal")..so on..;
+
+INSERT INTO department VALUES (1,1,"HR"),(2,2,"HR"),(3,3,"QA"),(4,4,"IT"),(5,5,"QA"),(6,6,"IT"),(7,7,"HR"),(8,8,"IT"),(9,9,"QA"),(10,10,"HR"),(11,11,"IT"),(12,12,"IT"),(13,13,"IT"),(14,14,"IT"),(15,15,"IT"),(16,16,"IT"),(17,17,"QA"),(18,18,"QA")..so on..;
+
+INSERT INTO employee_salary VALUES (4,4,"Software Engineer",60000,"Housing Rent Allowance","10LPA"),(5,5,"Quality Assurance tester",40000,"Housing Rent Allowance","5LPA"),(6,6,"Senior Software Engineer",65000,"Housing Rent Allowance","10LPA")..so on..;
+
+SELECT employee_details.first_name,employee_details.last_name,employee_details.state,employee_details.city,department.department_name from employee_list.employee_details JOIN employee_list.department ON employee_list.employee_details.id=employee_list.department.employee_details_id;
+
+
+
+
+SELECT employee_details.first_name,employee_details.last_name,employee_details.state,
+employee_details.city,department.department_name,employee_salary.ctc
+FROM employee_list.employee_details 
+JOIN employee_list.employee_salary 
+ON employee_list.employee_details.id=employee_list.employee_salary.employee_details_id 
+JOIN employee_list.department 
+ON employee_list.employee_salary.employee_details_id=employee_list.department.employee_details_id
+WHERE employee_list.employee_salary.ctc=(SELECT MAX(employee_salary.ctc) FROM employee_salary JOIN department ON employee_salary.employee_details_id = department.employee_details_id WHERE department.department_name = "HR")
+AND employee_list.department.department_name = "HR";
+
+
+SELECT employee_details.first_name,employee_details.last_name,employee_details.state,
+employee_details.city,department.department_name
+FROM employee_list.employee_details 
+JOIN employee_list.employee_salary 
+ON employee_list.employee_details.id=employee_list.employee_salary.employee_details_id 
+JOIN employee_list.department 
+ON employee_list.employee_salary.employee_details_id=employee_list.department.employee_details_id
+WHERE employee_list.employee_details.state="Haryana"
+AND employee_list.employee_details.city="Faridabad";
+
+
+SELECT employee_details.first_name,employee_details.last_name,employee_salary.ctc,employee_salary.basic_salary,
+employee_salary.flexi_basket,employee_details.state,
+employee_details.city,department.department_name
+FROM employee_list.employee_details 
+JOIN employee_list.employee_salary 
+ON employee_list.employee_details.id=employee_list.employee_salary.employee_details_id 
+JOIN employee_list.department 
+ON employee_list.employee_salary.employee_details_id=employee_list.department.employee_details_id
+WHERE employee_salary.designation = "DEV" order by ctc desc LIMIT 3;
+
+
+SELECT employee_details.first_name,employee_details.last_name,employee_details.dob,employee_details.state,employee_details.city,
+employee_salary.designation,employee_salary.basic_salary,employee_salary.flexi_basket,employee_salary.ctc,
+department.department_name,ROUND(DATEDIFF(CURDATE(),dob)/365) as age
+FROM employee_list.employee_details
+JOIN employee_list.employee_salary 
+ON employee_list.employee_details.id=employee_list.employee_salary.employee_details_id 
+JOIN employee_list.department 
+ON employee_list.employee_salary.employee_details_id=employee_list.department.employee_details_id
+WHERE ROUND(DATEDIFF(CURDATE(),employee_list.employee_details.dob)/365) > 32;
+
+
+
+SELECT  *,ROUND(DATEDIFF(CURDATE(),dob)/365) as age FROM employee_details;
+
+
+DATE_FORMAT( dob,'%d-%m-%Y')
+
+
+
+
+
+
